@@ -9,10 +9,9 @@
     }
     return newId
   }
-  const updatedTodo = ref("")
   const newTodo = ref("")
   const todos = ref([{id: newId(), text: "Learn Vue.js", complete: false, editing: false}])
-  if (typeof JSON.parse(localStorage.getItem("todos")) === "object" && JSON.parse(localStorage.getItem("todos")) != null) {
+  if (Array.isArray(JSON.parse(localStorage.getItem("todos")))) {
     todos.value = JSON.parse(localStorage.getItem("todos"))
   }
   setInterval(() => {localStorage.setItem("todos", JSON.stringify(todos.value))}, 60)
@@ -26,12 +25,6 @@
   function removeTodo(todo) {
     todos.value = todos.value.filter((t) => t.id !== todo.id)
   }
-
-  function updateTodo(todo) {
-    updatedTodo.value.replace(/^\s+|\s+$/g, '') ? todo.text = updatedTodo.value : ""
-    todo.editing = false
-    updatedTodo.value = ""
-  }
   function isEmpty(obj) {
     for (var prop in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -44,6 +37,7 @@
 
 <template>
   <h1>To-do List</h1>
+  <p>Made by Edward Jiang</p>
   <form @submit.prevent="addTodo">
     <input type="text" class="form-control" v-model="newTodo" />
     <input type="submit" value="Add Todo" class="btn btn-light" />
@@ -54,14 +48,14 @@
       <li class="list-group-item" v-for="todo in todos" :class="todo.complete ? 'bg-light' : ''">
         <span :class="todo.complete ? 'done' : ''">
           {{ todo.editing ? '' : todo.text }}
-        <form @submit.prevent="updateTodo(todo)" class="inlineform" :class="todo.editing ? '' : 'd-none'">
-          <input type="text" class="form-control" v-model="updatedTodo" :placeholder="todo.text"/>
+        <form @submit.prevent="todo.editing=false" class="inlineform" :class="todo.editing ? '' : 'd-none'">
+          <input type="text" class="form-control" v-model="todo.text"/>
           <input type="submit" value="Update" class="btn btn-light" />
         </form>
         </span>
         <span class="options">
           <i class="bi bi-bookmark-check text-success" @click="todo.complete = !todo.complete"></i>
-          <i class="bi bi-pencil-square text-muted" @click="todo.editing = true"></i>
+          <i class="bi bi-pencil-square text-muted" @click="todo.editing = !todo.editing"></i>
           <i class="bi bi-x-circle text-danger" @click="removeTodo(todo)"></i>
         </span>
       </li>
