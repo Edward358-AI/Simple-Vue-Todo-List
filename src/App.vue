@@ -9,6 +9,7 @@
     }
     return newId
   }
+  const hide = ref(false)
   const newTodo = ref("")
   const todos = ref([{id: newId(), text: "Learn Vue.js", complete: false, editing: false}])
   if (Array.isArray(JSON.parse(localStorage.getItem("todos")))) {
@@ -33,6 +34,11 @@
     }
     return true
   }
+  const filteredTodos = computed(() => {
+    return hide.value
+      ? todos.value.filter((t) => !t.complete)
+      : todos.value
+  })
 </script>
 
 <template>
@@ -45,7 +51,7 @@
   <p style="font-size:1.2rem;" :class="isEmpty(todos) ? '' : 'd-none'">Hooray! You've finished everything on your todo list! Cheers :D</p>
   <div class="todo-container card" :class="isEmpty(todos) ? 'd-none' : ''">
     <ul class="list-group list-group-flush">
-      <li class="list-group-item" v-for="todo in todos" :class="todo.complete ? 'bg-light' : ''">
+      <li class="list-group-item" v-for="todo in filteredTodos" :class="todo.complete ? 'bg-light' : ''">
         <span :class="todo.complete ? 'done' : ''">
           {{ todo.editing ? '' : todo.text }}
         <form @submit.prevent="todo.editing=false" class="inlineform" :class="todo.editing ? '' : 'd-none'">
@@ -59,6 +65,7 @@
           <i class="bi bi-x-circle text-danger" @click="removeTodo(todo)"></i>
         </span>
       </li>
+      <li class="list-group-item text-center bg-light" style="cursor:pointer" @click="hide=!hide">{{ hide ? "Show All" : "Hide Completed" }}</li>
     </ul>
   </div>
 </template>
