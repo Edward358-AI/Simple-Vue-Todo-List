@@ -12,7 +12,7 @@
   const updatedTodo = ref("")
   const newTodo = ref("")
   const todos = ref([{id: newId(), text: "Learn Vue.js", complete: false, editing: false}])
-  if (typeof JSON.parse(localStorage.getItem("todos")) === "object") {
+  if (localStorage.getItem("todos") {
     todos.value = JSON.parse(localStorage.getItem("todos"))
   }
   
