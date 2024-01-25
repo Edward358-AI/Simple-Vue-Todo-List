@@ -12,9 +12,10 @@
   const updatedTodo = ref("")
   const newTodo = ref("")
   const todos = ref([{id: newId(), text: "Learn Vue.js", complete: false, editing: false}])
-  if (typeof JSON.parse(localStorage.getItem("todos")) === "object") {
+  if (typeof JSON.parse(localStorage.getItem("todos")) === "object" && JSON.parse(localStorage.getItem("todos")) != null) {
     todos.value = JSON.parse(localStorage.getItem("todos"))
   }
+  setInterval(() => {localStorage.setItem("todos", JSON.stringify(todos.value))}, 60)
   
   
   function addTodo() {
@@ -39,7 +40,6 @@
     }
     return true
   }
-  setInterval(() => {localStorage.setItem("todos", JSON.stringify(todos.value))}, 60)
 </script>
 
 <template>
