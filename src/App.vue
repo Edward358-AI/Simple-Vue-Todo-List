@@ -54,11 +54,11 @@
       <li class="list-group-item" v-for="todo in filteredTodos" :class="todo.complete ? 'bg-light' : ''">
         <span :class="todo.complete ? 'done' : ''">
           {{ todo.editing ? '' : todo.text }}
+        </span>
         <form @submit.prevent="todo.editing=false" class="inlineform" :class="todo.editing ? '' : 'd-none'">
           <input type="text" class="form-control" v-model="todo.text"/>
           <input type="submit" value="Update" class="btn btn-light" />
         </form>
-        </span>
         <span class="options">
           <i class="bi bi-bookmark-check text-success" @click="todo.complete = !todo.complete"></i>
           <i class="bi bi-pencil-square text-muted" @click="todo.editing = !todo.editing"></i>
